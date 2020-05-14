@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from src.database.models import setup_db, db_drop_and_create_all, Actor, Movie
 from src.auth.auth import AuthError, requires_auth
+from src.mock_data import actors, movies
 
 def create_app(test_config=None):
     app_ = Flask(__name__)
@@ -12,6 +13,7 @@ def create_app(test_config=None):
 app = create_app()
 setup_db(app)
 
+
 '''
     restart_db_with_test_data()
     for testing purposes only this function restarts the database
@@ -19,10 +21,14 @@ setup_db(app)
 '''
 def restart_db_with_test_data():
     db_drop_and_create_all()
-    actor_test = Actor(name="Sarah Jessica Tester", age="55", gender="Non-binary")
-    actor_test.insert()
-    movie_test = Movie(title="Jess and the City II", release_date="2020-1-20")
-    movie_test.insert()
+    for actor in actors:
+        actor_obj = Actor(name=actor["name"], age=actor["age"], gender=actor["gender"])
+        actor_obj.insert()
+
+    for movie in movies:
+        movie_obj = Movie(title=movie["title"], release_date=movie["release_date"])
+        movie_obj.insert()
+
 # comment this function call if not running tests
 restart_db_with_test_data()
 
