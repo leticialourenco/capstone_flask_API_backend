@@ -32,6 +32,19 @@ def get_actors():
         'actors': actors
     })
 
+@app.route('/actor/<int:id>')
+def get_actor(id):
+    # query all actor with matching id as the param
+    actor = Actor.query.filter_by(id=id).one_or_none()
+    # checks for presence of a result
+    if not actor:
+        abort(404)
+
+    return jsonify({
+        'success': True,
+        'actor': actor.format()
+    })
+
 @app.route('/actors', methods=['POST'])
 def create_actor():
     data = request.get_json()
@@ -55,7 +68,59 @@ def create_actor():
         'actor': actor.format()
     })
 
+@app.route('/actor/<int:id>/edit', methods=['PATCH'])
+def edit_actor(id):
+    actor = Actor.query.filter_by(id=id).one_or_none()
+    # check for existence of actor in db
+    if not actor:
+        abort(404)
 
+    data = request.get_json()
+    # checks for presence of data in request
+    if not data:
+        abort(400)
+
+    # in case new value for attribute was present in request
+    if 'name' in data:
+        actor.name = data['name']
+    if 'age' in data:
+        actor.age = data['age']
+    if 'gender' in data:
+        actor.age = data['gender']
+
+    try:
+        actor.update()
+    except:
+        abort(422)
+
+    return jsonify({
+        'success': True,
+        'actor': actor.format()
+    })
+
+@app.route('/actor/<int:id>', methods=['DELETE'])
+def delete_actor(id):
+    # query all actor with matching id as the param
+    actor = Actor.query.filter_by(id=id).one_or_none()
+    # checks for presence of a result
+    if not actor:
+        abort(404)
+    # delete actor from database
+    try:
+        actor.delete()
+    except:
+        abort(422)
+
+    return jsonify({
+        'success': True,
+        'deleted_actor_id': id
+    })
+
+
+
+'''                 
+    ERROR HANDLERS
+'''
 @app.errorhandler(400)
 def bad_request(error):
     return jsonify({
