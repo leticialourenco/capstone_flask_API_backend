@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, abort
-from src.database.models import setup_db, Actor, Movie
 from flask_cors import CORS
+from src.database.models import setup_db, Actor, Movie
+from src.auth.auth import AuthError, requires_auth
 
 def create_app(test_config=None):
     app_ = Flask(__name__)
@@ -22,7 +23,8 @@ def index():
     ACTOR API ENDPOINTS
 '''
 @app.route('/actors')
-def get_actors():
+@requires_auth('view:actor')
+def get_actors(jwt):
     # query all actors from table
     raw_actors = Actor.query.all()
     # extract information from actors using its format() method
@@ -37,7 +39,8 @@ def get_actors():
     })
 
 @app.route('/actor/<int:id>')
-def get_actor(id):
+@requires_auth('view:actor')
+def get_actor(jwt, id):
     # query actor with matching id as the param
     actor = Actor.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
@@ -50,7 +53,8 @@ def get_actor(id):
     })
 
 @app.route('/actors', methods=['POST'])
-def create_actor():
+@requires_auth('add:actor')
+def create_actor(jwt):
     data = request.get_json()
     # checks for presence of content in data
     if not data:
@@ -73,7 +77,8 @@ def create_actor():
     })
 
 @app.route('/actor/<int:id>/edit', methods=['PATCH'])
-def edit_actor(id):
+@requires_auth('edit:actor')
+def edit_actor(jwt, id):
     actor = Actor.query.filter_by(id=id).one_or_none()
     # check for existence of actor in db
     if not actor:
@@ -103,7 +108,8 @@ def edit_actor(id):
     })
 
 @app.route('/actor/<int:id>', methods=['DELETE'])
-def delete_actor(id):
+@requires_auth('delete:actor')
+def delete_actor(jwt, id):
     # query actor with matching id as the param
     actor = Actor.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
@@ -125,7 +131,8 @@ def delete_actor(id):
     MOVIE API ENDPOINTS
 '''
 @app.route('/movies')
-def get_movies():
+@requires_auth('view:movie')
+def get_movies(jwt):
     # query all movies from table
     raw_movies = Movie.query.all()
     # extract information from movies using its format() method
@@ -140,7 +147,8 @@ def get_movies():
     })
 
 @app.route('/movie/<int:id>')
-def get_movie(id):
+@requires_auth('view:movie')
+def get_movie(jwt, id):
     # query movie with matching id as the param
     movie = Movie.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
@@ -153,7 +161,8 @@ def get_movie(id):
     })
 
 @app.route('/movies', methods=['POST'])
-def create_movie():
+@requires_auth('add:movie')
+def create_movie(jwt):
     data = request.get_json()
     # checks for presence of results in data
     if not data:
@@ -175,7 +184,8 @@ def create_movie():
     })
 
 @app.route('/movie/<int:id>/edit', methods=['PATCH'])
-def edit_movie(id):
+@requires_auth('edit:movie')
+def edit_movie(jwt, id):
     movie = Movie.query.filter_by(id=id).one_or_none()
     # check for existence of movie in db
     if not movie:
@@ -203,7 +213,8 @@ def edit_movie(id):
     })
 
 @app.route('/movie/<int:id>', methods=['DELETE'])
-def delete_movie(id):
+@requires_auth('delete:movie')
+def delete_movie(jwt, id):
     # query movie with matching id as the param
     movie = Movie.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
@@ -247,6 +258,12 @@ def unprocessable(error):
         "error": 422,
         "message": "unprocessable"
     }), 422
+
+@app.errorhandler(AuthError)
+def handle_auth_error(exception):
+    error_response = jsonify(exception.error)
+    error_response.status_code = exception.status_code
+    return error_response
 
 
 if __name__ == '__main__':
