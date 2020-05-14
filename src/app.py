@@ -46,7 +46,7 @@ def get_actors(jwt):
         'actors': actors
     })
 
-@app.route('/actor/<int:id>')
+@app.route('/actors/<int:id>')
 @requires_auth('view:actor')
 def get_actor(jwt, id):
     # query actor with matching id as the param
@@ -84,7 +84,7 @@ def create_actor(jwt):
         'actor': actor.format()
     })
 
-@app.route('/actor/<int:id>/edit', methods=['PATCH'])
+@app.route('/actors/<int:id>/edit', methods=['PATCH'])
 @requires_auth('edit:actor')
 def edit_actor(jwt, id):
     actor = Actor.query.filter_by(id=id).one_or_none()
@@ -103,7 +103,7 @@ def edit_actor(jwt, id):
     if 'age' in data:
         actor.age = data['age']
     if 'gender' in data:
-        actor.age = data['gender']
+        actor.gender = data['gender']
 
     try:
         actor.update()
@@ -115,7 +115,7 @@ def edit_actor(jwt, id):
         'actor': actor.format()
     })
 
-@app.route('/actor/<int:id>', methods=['DELETE'])
+@app.route('/actors/<int:id>', methods=['DELETE'])
 @requires_auth('delete:actor')
 def delete_actor(jwt, id):
     # query actor with matching id as the param
@@ -154,7 +154,7 @@ def get_movies(jwt):
         'movies': movies
     })
 
-@app.route('/movie/<int:id>')
+@app.route('/movies/<int:id>')
 @requires_auth('view:movie')
 def get_movie(jwt, id):
     # query movie with matching id as the param
@@ -191,7 +191,7 @@ def create_movie(jwt):
         'movie': movie.format()
     })
 
-@app.route('/movie/<int:id>/edit', methods=['PATCH'])
+@app.route('/movies/<int:id>/edit', methods=['PATCH'])
 @requires_auth('edit:movie')
 def edit_movie(jwt, id):
     movie = Movie.query.filter_by(id=id).one_or_none()
@@ -220,7 +220,7 @@ def edit_movie(jwt, id):
         'movie': movie.format()
     })
 
-@app.route('/movie/<int:id>', methods=['DELETE'])
+@app.route('/movies/<int:id>', methods=['DELETE'])
 @requires_auth('delete:movie')
 def delete_movie(jwt, id):
     # query movie with matching id as the param
