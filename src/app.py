@@ -17,6 +17,10 @@ def index():
         'message': 'success'
     })
 
+
+'''
+    ACTOR API ENDPOINTS
+'''
 @app.route('/actors')
 def get_actors():
     # query all actors from table
@@ -34,7 +38,7 @@ def get_actors():
 
 @app.route('/actor/<int:id>')
 def get_actor(id):
-    # query all actor with matching id as the param
+    # query actor with matching id as the param
     actor = Actor.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
     if not actor:
@@ -48,7 +52,7 @@ def get_actor(id):
 @app.route('/actors', methods=['POST'])
 def create_actor():
     data = request.get_json()
-    # checks for presence of results in actors list
+    # checks for presence of content in data
     if not data:
         abort(400)
 
@@ -100,7 +104,7 @@ def edit_actor(id):
 
 @app.route('/actor/<int:id>', methods=['DELETE'])
 def delete_actor(id):
-    # query all actor with matching id as the param
+    # query actor with matching id as the param
     actor = Actor.query.filter_by(id=id).one_or_none()
     # checks for presence of a result
     if not actor:
@@ -116,6 +120,105 @@ def delete_actor(id):
         'deleted_actor_id': id
     })
 
+
+'''
+    MOVIE API ENDPOINTS
+'''
+@app.route('/movies')
+def get_movies():
+    # query all movies from table
+    raw_movies = Movie.query.all()
+    # extract information from movies using its format() method
+    movies = [movie.format() for movie in raw_movies]
+    # checks for presence of results in movies list
+    if not len(movies):
+        abort(404)
+
+    return jsonify({
+        'success': True,
+        'movies': movies
+    })
+
+@app.route('/movie/<int:id>')
+def get_movie(id):
+    # query movie with matching id as the param
+    movie = Movie.query.filter_by(id=id).one_or_none()
+    # checks for presence of a result
+    if not movie:
+        abort(404)
+
+    return jsonify({
+        'success': True,
+        'movie': movie.format()
+    })
+
+@app.route('/movies', methods=['POST'])
+def create_movie():
+    data = request.get_json()
+    # checks for presence of results in data
+    if not data:
+        abort(400)
+
+    # retrieves data from request
+    title = data['title']
+    release_date = data['release_date']
+    # creates a new instance of actor passing the retrieved data
+    movie = Movie(title=title, release_date=release_date)
+    try:
+        movie.insert()
+    except:
+        abort(422)
+
+    return jsonify({
+        'success': True,
+        'movie': movie.format()
+    })
+
+@app.route('/movie/<int:id>/edit', methods=['PATCH'])
+def edit_movie(id):
+    movie = Movie.query.filter_by(id=id).one_or_none()
+    # check for existence of movie in db
+    if not movie:
+        abort(404)
+
+    data = request.get_json()
+    # checks for presence of data in request
+    if not data:
+        abort(400)
+
+    # in case new value for attribute was present in request
+    if 'title' in data:
+        movie.title = data['title']
+    if 'release_date' in data:
+        movie.release_date = data['release_date']
+
+    try:
+        movie.update()
+    except:
+        abort(422)
+
+    return jsonify({
+        'success': True,
+        'movie': movie.format()
+    })
+
+@app.route('/movie/<int:id>', methods=['DELETE'])
+def delete_movie(id):
+    # query movie with matching id as the param
+    movie = Movie.query.filter_by(id=id).one_or_none()
+    # checks for presence of a result
+    if not movie:
+        abort(404)
+    # delete movie from database
+    try:
+        movie.delete()
+    except:
+        abort(422)
+
+    return jsonify({
+        'success': True,
+        'deleted_movie_id': id
+    })
 
 
 '''                 
