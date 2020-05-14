@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from src.database.models import setup_db, Actor, Movie
 from flask_cors import CORS
-import psycopg2
 
 def create_app(test_config=None):
     app_ = Flask(__name__)
