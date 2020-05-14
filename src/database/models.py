@@ -14,6 +14,10 @@ def setup_db(app):
     db.create_all()
     migrate.init_app(app, db)
 
+def db_drop_and_create_all():
+    db.drop_all()
+    db.create_all()
+
 class Actor(db.Model):
     __tablename__ = 'actors'
 

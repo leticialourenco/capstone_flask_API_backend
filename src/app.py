@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-from src.database.models import setup_db, Actor, Movie
+from src.database.models import setup_db, db_drop_and_create_all, Actor, Movie
 from src.auth.auth import AuthError, requires_auth
 
 def create_app(test_config=None):
@@ -12,11 +12,19 @@ def create_app(test_config=None):
 app = create_app()
 setup_db(app)
 
-@app.route('/')
-def index():
-    return jsonify({
-        'message': 'success'
-    })
+'''
+    restart_db_with_test_data()
+    for testing purposes only this function restarts the database
+    and adds mock data to it
+'''
+def restart_db_with_test_data():
+    db_drop_and_create_all()
+    actor_test = Actor(name="Sarah Jessica Tester", age="55", gender="Non-binary")
+    actor_test.insert()
+    movie_test = Movie(title="Jess and the City II", release_date="2020-1-20")
+    movie_test.insert()
+# comment this function call if not running tests
+restart_db_with_test_data()
 
 
 '''
