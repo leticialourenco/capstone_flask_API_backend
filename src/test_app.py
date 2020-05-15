@@ -1,6 +1,6 @@
 import json
 import unittest
-from src.app import app
+from app import app
 
 # JWT token with all permissions to be injected in the header of requests for testing feature to run
 # generated on 5/14/20 lifetime of 30 days
