@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ## Database Setup
 With Postgres running, initialize the the database
 ```bash
-createdb casting-agency
+createdb <db_name>
 ```
 
 ## Running the server
@@ -34,8 +34,14 @@ First update db_path variable under `/src/database/models` with your database UR
 
 Then from the `/` directory first ensure you are using a virtual environment then to run the server, execute:
 
+Export necessary environment variables:
 ```bash
+export DB_PATH=postgres://user:password@localhost:5432/<db_name>
 export FLASK_APP=app.py
+```
+
+Run flask app
+```bash
 flask run --reload
 ```
 

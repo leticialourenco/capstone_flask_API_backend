@@ -1,7 +1,8 @@
+import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, DateTime
 
-db_path = 'postgres://hmkccwqrygrten:b3ab3603edd476a92263be6891e0488ad4e074152d1b32991f6af7b9ff14542d@ec2-52-207-25-133.compute-1.amazonaws.com:5432/da3tkdopuhm305'
+db_path = os.environ.get('DB_PATH', '')
 db = SQLAlchemy()
 
 def setup_db(app):
