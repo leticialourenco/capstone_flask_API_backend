@@ -31,7 +31,7 @@ def restart_db_with_test_data():
 
 
 # comment this function call if not running tests
-# restart_db_with_test_data()
+restart_db_with_test_data()
 
 @app.route('/')
 def index():
