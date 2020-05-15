@@ -1,10 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, DateTime
-from flask_migrate import Migrate
 
 db_path = 'postgres://leticia:5678@localhost:5432/casting_agency'
 db = SQLAlchemy()
-migrate = Migrate()
 
 def setup_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = db_path
@@ -12,7 +10,6 @@ def setup_db(app):
     db.app = app
     db.init_app(app)
     db.create_all()
-    migrate.init_app(app, db)
 
 def db_drop_and_create_all():
     db.drop_all()
