@@ -29,8 +29,16 @@ def restart_db_with_test_data():
         movie_obj = Movie(title=movie["title"], release_date=movie["release_date"])
         movie_obj.insert()
 
+
 # comment this function call if not running tests
 restart_db_with_test_data()
+
+@app.route('/')
+def index():
+    return jsonify({
+        'success': True,
+        'message': "Welcome to casting-agency API"
+    })
 
 
 '''
