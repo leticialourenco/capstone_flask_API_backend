@@ -275,7 +275,7 @@
 					"response": []
 				},
 				{
-					"name": "/actors/2/edit",
+					"name": "/actors/1/edit",
 					"event": [
 						{
 							"listen": "test",
@@ -308,7 +308,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/actors/2/edit",
+							"raw": "http://127.0.0.1:5000/actors/1/edit",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -319,7 +319,7 @@
 							"port": "5000",
 							"path": [
 								"actors",
-								"2",
+								"1",
 								"edit"
 							]
 						}
@@ -327,7 +327,7 @@
 					"response": []
 				},
 				{
-					"name": "/movies/2/edit",
+					"name": "/movies/1/edit",
 					"event": [
 						{
 							"listen": "test",
@@ -360,7 +360,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/movies/2/edit",
+							"raw": "http://127.0.0.1:5000/movies/1/edit",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -371,7 +371,7 @@
 							"port": "5000",
 							"path": [
 								"movies",
-								"2",
+								"1",
 								"edit"
 							]
 						}
