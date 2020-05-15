@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer, DateTime
 
-db_path = 'postgres://leticia:5678@localhost:5432/casting_agency'
+db_path = 'postgres://hmkccwqrygrten:b3ab3603edd476a92263be6891e0488ad4e074152d1b32991f6af7b9ff14542d@ec2-52-207-25-133.compute-1.amazonaws.com:5432/da3tkdopuhm305'
 db = SQLAlchemy()
 
 def setup_db(app):
